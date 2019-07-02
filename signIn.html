@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link rel="stylesheet" href="./assest/css/signIn.css" />
+		<link rel="stylesheet" href="./assest/css/main.css" />
+		<title>SignUp</title>
+	</head>
+
+	<body>
+		<div class="w-80 mx-auto">
+			<div class="h-100vh">
+				<div class="d-flex flex-column justify-content-between">
+					<nav class="h-10vh">
+						<div class="d-flex justify-content-between">
+							<div class="logo">
+								<a href="./index.html">
+									<img
+										src="./assest/images/svg/logo.png"
+										alt="logo"
+										width="100%"
+										height="100%"
+										class="responsive-image"
+									/>
+								</a>
+							</div>
+						</div>
+					</nav>
+					<section class="h-90vh d-flex justify-content-center">
+						<div class="">
+							<div class="form-structor">
+								<div class="signup">
+									<div class="parent">
+										<div class="in-between"></div>
+									</div>
+									<h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
+									<form>
+										<div class="form-holder">
+											<input
+												type="text"
+												id="firstName"
+												class="input"
+												placeholder="First Name"
+												required
+											/>
+											<input
+												type="text"
+												id="lastName"
+												class="input"
+												placeholder="Last Name"
+												required
+											/>
+											<input
+												type="email"
+												id="regEmail"
+												class="input"
+												placeholder="Email"
+												required
+											/>
+											<input
+												type="tel"
+												id="phone"
+												class="input"
+												placeholder="Phone"
+												required
+											/>
+											<input
+												type="password"
+												id="regPassword"
+												class="input"
+												placeholder="Password"
+												required
+											/>
+											<input
+												type="password"
+												id="cnfPassword"
+												class="input"
+												placeholder="Confirm Password"
+												required
+											/>
+										</div>
+										<p>
+											<input
+												type="radio"
+												name="role"
+												id="seller"
+												value="seller"
+												required
+											/>
+											<label for="seller" class="text-white">seller</label>
+											<input
+												type="radio"
+												name="role"
+												id="buyer"
+												value="buyer"
+												checked
+											/>
+											<label for="buyer" class="text-white">buyer</label>
+										</p>
+									</form>
+									<button class="submit-btn" onclick="register()">
+										Sign up
+									</button>
+								</div>
+								<div class="login slide-up">
+									<div class="center">
+										<h2 class="form-title" id="login"><span>or</span>Log in</h2>
+										<div class="form-holder">
+											<input
+												type="email"
+												id="loginEmail"
+												class="input"
+												placeholder="Email"
+											/>
+											<input
+												type="password"
+												id="loginPassword"
+												class="input"
+												placeholder="Password"
+											/>
+										</div>
+										<a
+											class="text-abstract-orange my-2 d-flex justify-content-end"
+											href="resetPassword.html"
+										>
+											<small class="underline font-small"
+												>Forgot your password?</small
+											>
+										</a>
+										<a onclick="login()" class="submit-btn">Log in</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<footer class="h-10vh mt-2">
+						<div class="d-flex justify-content-center">
+							<p>
+								Okafor Jude Chukwuebuka
+								<i class="material-icons">copyright</i> 2019
+							</p>
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+
+		<script src="./assest/js/ui.js"></script>
+		<script src="./assest/js/HTTP.js"></script>
+		<script src="./assest/js/signIn.js"></script>
+	</body>
+</html>
