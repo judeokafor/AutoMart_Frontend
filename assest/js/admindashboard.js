@@ -17,34 +17,34 @@ const allFlags = $('#allFlags');
 const content = $('#content');
 const newContent = $('#newContent');
 const getAllCars = async () => {
-  const url = `${baseUrl}car/all`;
-  let status = '';
-  try {
-    if (user) {
-      const res = await http.getWithHeaders(url, user.token);
-      if (res.status === 200) {
-        const availableCars = [];
-        const soldCars = [];
-        res.data.forEach((car) => {
-          if (car.status === 'available') {
-            availableCars.push(car);
-          } else {
-            soldCars.push(car);
-          }
-        });
-        availableCars.forEach((car) => {
-          if (car.status === 'available') {
-            status = `<div>
+	const url = `${baseUrl}car/all`;
+	let status = '';
+	try {
+		if (user) {
+			const res = await http.getWithHeaders(url, user.token);
+			if (res.status === 200) {
+				const availableCars = [];
+				const soldCars = [];
+				res.data.forEach(car => {
+					if (car.status === 'available') {
+						availableCars.push(car);
+					} else {
+						soldCars.push(car);
+					}
+				});
+				availableCars.forEach(car => {
+					if (car.status === 'available') {
+						status = `<div>
             <i class="fab fa-opencart"></i>
             <small class="mr-2">Available</small>
           </div>`;
-          } else {
-            status = `<div>
+					} else {
+						status = `<div>
             <i class="fas fa-times-circle"></i>
             <small class="mr-2">Sold</small>
           </div>`;
-          }
-          unsoldCars.innerHTML += `
+					}
+					unsoldCars.innerHTML += `
           <div class="col-12 col-md-6 col-lg-4 my-2">
 										<div class="wrapper">
 											<div class="container">
@@ -136,20 +136,20 @@ const getAllCars = async () => {
 										</div>
 									</div>
           `;
-        });
-        soldCars.forEach((car) => {
-          if (car.status === 'available') {
-            status = `<div>
+				});
+				soldCars.forEach(car => {
+					if (car.status === 'available') {
+						status = `<div>
             <i class="fab fa-opencart"></i>
             <small class="mr-2">Available</small>
           </div>`;
-          } else {
-            status = `<div>
+					} else {
+						status = `<div>
             <i class="fas fa-times-circle"></i>
             <small class="mr-2">Sold</small>
           </div>`;
-          }
-          soldVehicles.innerHTML += `
+					}
+					soldVehicles.innerHTML += `
           <div class="col-12 col-md-6 col-lg-4 my-2">
 										<div class="wrapper">
 											<div class="container">
@@ -242,22 +242,22 @@ const getAllCars = async () => {
 										</div>
 									</div>
           `;
-        });
-      } else if (res.status === 404) {
-        console.log('cars not available');
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
+				});
+			} else if (res.status === 404) {
+				console.log('cars not available');
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
-const getSpecificCar = async (id) => {
-  const url = `${baseUrl}car/${id}`;
-  try {
-    const { status, data } = await http.get(url);
-    console.log(data);
-    if (status === 200) {
-      newContent.innerHTML = `
+const getSpecificCar = async id => {
+	const url = `${baseUrl}car/${id}`;
+	try {
+		const { status, data } = await http.get(url);
+		console.log(data);
+		if (status === 200) {
+			newContent.innerHTML = `
 			<div class="container">
 					<div class="bg-light-grey">
 						<div class=" p-2 row">
@@ -372,13 +372,11 @@ const getSpecificCar = async (id) => {
 									</p>
 
 									<div class="d-flex justify-content-between">
-										<a href="#" onclick= "deleteOneCar(${
-  data.carid
-})" class="delete text-red clickable">
+										<a onclick= "deleteOneCar(${data.carid})" class="delete text-red clickable">
 											Delete Ad
 											<i class="far fa-trash-alt text-red delete"></i>
                     </a>
-                    <a href="/AutoMart/UI/admindashboard.html" class="delete clickable" role="button" >Back
+                    <a onclick= "reload()" class="delete clickable" role="button" >Back
                       <i class="fas fa-long-arrow-alt-left "></i>
 										</a>
 									</div>
@@ -388,92 +386,93 @@ const getSpecificCar = async (id) => {
 					</div>
 				</div>
       `;
-      content.appendChild(newContent);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+			content.appendChild(newContent);
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const getCurrentProfile = async () => {
-  const username = $('#username');
-  const userimage = $('#userimage');
-  const url = `${baseUrl}auth/getProfile`;
-  try {
-    if (user) {
-      const res = await http.getWithHeaders(url, user.token);
-      if (res.status === 200) {
-        username.textContent = `${res.data.firstname} ${res.data.lastname}`;
-        userimage.setAttribute('src', res.data.avatar);
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
+	const username = $('#username');
+	const userimage = $('#userimage');
+	const url = `${baseUrl}auth/getProfile`;
+	try {
+		if (user) {
+			const res = await http.getWithHeaders(url, user.token);
+			if (res.status === 200) {
+				username.textContent = `${res.data.firstname} ${res.data.lastname}`;
+				userimage.setAttribute('src', res.data.avatar);
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
-const deleteCar = async (id) => {
-  const url = `${baseUrl}car/${id}`;
-  try {
-    if (user) {
-      const res = await http.deleteWithHeader(url, user.token);
-      console.log('res from delete', res);
-      if (res.status === 200) {
-        unsoldCars.innerHTML = '';
-        soldVehicles.innerHTML = '';
-        getAllCars();
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
+const deleteCar = async id => {
+	const url = `${baseUrl}car/${id}`;
+	try {
+		if (user) {
+			const res = await http.deleteWithHeader(url, user.token);
+			console.log('res from delete', res);
+			if (res.status === 200) {
+				unsoldCars.innerHTML = '';
+				soldVehicles.innerHTML = '';
+				getAllCars();
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
-const deleteOneCar = (id) => {
-  deleteCar(id);
-  setTimeout(() => {
-    window.location.reload();
-  }, 2000);
+const deleteOneCar = id => {
+	deleteCar(id);
+	setTimeout(() => {
+		window.location.reload();
+	}, 2000);
 };
 const logoutUser = async () => {
-  const url = `${baseUrl}auth/logout`;
-  try {
-    const res = await http.get(url);
-    console.log(' res from logout', res);
-    if (res.status === 200) {
-      localStorage.clear();
-      window.location.pathname = '/AutoMart/UI/signIn.html';
-    }
-  } catch (error) {
-    console.log(error);
-  }
+	const url = `${baseUrl}auth/logout`;
+	try {
+		const res = await http.get(url);
+		console.log(' res from logout', res);
+		if (res.status === 200) {
+			localStorage.clear();
+			window.location.pathname = '/signIn.html';
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const checkIfLoggedIn = () => {
-  if (user.token && user.role === 'admin') {
-    console.log('You are an admin');
-  } else {
-    window.location.pathname = '/AutoMart/UI/signIn.html';
-  }
+	if (user.token && user.role === 'admin') {
+		console.log('You are an admin');
+	} else {
+		window.location.pathname = '/signIn.html';
+	}
 };
 const reload = () => {
-  window.location.reload();
+	window.location.reload();
 };
 const getAllFlags = async () => {
-  const url = `${baseUrl}flag`;
-  try {
-    if (user) {
-      const res = await http.getWithHeaders(url, user.token);
-      if (res.status === 200) {
-        let phoneNumber;
-        res.data.forEach((report) => {
-          if (report.phone !== '' || report.phone !== null) {
-            phoneNumber = ` <h3>${report.phone}</h3>`;
-          } else {
-            phoneNumber = '';
-          }
-          allFlags.innerHTML += `
+	const url = `${baseUrl}flag`;
+	try {
+		if (user) {
+			const res = await http.getWithHeaders(url, user.token);
+			console.log(res);
+			if (res.status === 200) {
+				let phoneNumber;
+				res.data.forEach(report => {
+					if (report.phone !== '' || report.phone !== null) {
+						phoneNumber = ` <h3>${report.phone}</h3>`;
+					} else {
+						phoneNumber = '';
+					}
+					allFlags.innerHTML += `
           <div class="container">
           <div class="parent">
 							<div class="in-between"></div>
 						</div>
-            <div class="list row">
+            <div class="list row my-2">
               <div class="col-4 col-md-3 bg-purple">
                 <h3>${report.name}</h3>
               </div>
@@ -481,63 +480,62 @@ const getAllFlags = async () => {
                 <h3>${report.reason}</h3>
                 <p>${report.description}</p>
                 <div class ="d-flex justify-content-between">
-                  <button onclick = "contactSeller()" class = "btn btn-orange my-2">Contact Seller</button>
-                  <button onclick = "viewAdvert()" class = "btn btn-purple-reverse my-2">View Advert</button>
-                  <button class= "btn btn-purple my-2" onclick="reload()">Back</button>
+                  <button onclick = "contactSeller()" class = "btn btn-orange my-1">Contact Seller</button>
+                  <button onclick = "viewAdvert(${
+										report.car_id
+									})" class = "btn btn-purple-reverse my-1">View Advert</button>
+                  <button class= "btn btn-purple my-1" onclick="reload()">Back</button>
                 </div>
               </div>
             </div>
 					</div>
           `;
-        });
-      } else {
-        allFlags.innerHTML += `
-          <div class="list">
-												<ul>
-													<li>
-                            <h2>
-                            ${res.message}
-                            </h2>
-													</li>
-												</ul>
-											</div>`;
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
+				});
+			} else {
+				allFlags.innerHTML += `
+          <div class="p-5 mx-auto">
+						<h2 class = "text-center">
+              ${res.message}
+            </h2>
+					</div>`;
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const contactSeller = () => {
-  ui.showAlert('Working on it', 'alert info');
+	ui.showAlert('Working on it', 'alert info');
 };
-const viewAdvert = () => {
-  ui.showAlert('Working on it', 'alert info');
+const viewAdvert = id => {
+	ui.showAlert('Working on it', 'alert info');
+	getSpecificCar(id);
 };
 const openCar = (evt, condition) => {
-  let i;
-  let tabcontent;
-  let tablinks;
-  unsoldCars.innerHTML = '';
-  soldVehicles.innerHTML = '';
-  allFlags.innerHTML = '';
-  getAllCars();
-  getAllFlags();
-  tabcontent = document.getElementsByClassName('tabcontent');
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = 'none';
-  }
-  tablinks = document.getElementsByClassName('tablinks');
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(' active', '');
-  }
-  document.getElementById(condition).style.display = 'block';
-  evt.currentTarget.className += 'active';
+	let i;
+	let tabcontent;
+	let tablinks;
+	unsoldCars.innerHTML = '';
+	soldVehicles.innerHTML = '';
+	allFlags.innerHTML = '';
+	getAllCars();
+	getAllFlags();
+	tabcontent = document.getElementsByClassName('tabcontent');
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = 'none';
+	}
+	tablinks = document.getElementsByClassName('tablinks');
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].className = tablinks[i].className.replace(' active', '');
+	}
+	document.getElementById(condition).style.display = 'block';
+	evt.currentTarget.className += 'active';
 };
 const onInit = () => {
-  checkIfLoggedIn();
-  getCurrentProfile();
-  getAllCars();
-  getAllFlags();
+	checkIfLoggedIn();
+	getCurrentProfile();
+	getAllCars();
+	getAllFlags();
 };
 
 onInit();

@@ -4,7 +4,7 @@ const mainNav = $('#js-menu');
 const navBarToggle = $('#js-navbar-toggle');
 
 navBarToggle.addEventListener('click', () => {
-  mainNav.classList.toggle('active-nav');
+	mainNav.classList.toggle('active-nav');
 });
 
 // instantiate Epichttp library
@@ -18,23 +18,23 @@ const homeCars = $('#homeCars');
 const screen = $('#main-section');
 
 const getAllUnsoldCars = async () => {
-  try {
-    const res = await http.get(`${baseUrl}car/unsold?status=available`);
-    if (res.status === 200) {
-      let status;
-      res.data.forEach((item) => {
-        if (item.status === 'available') {
-          status = `<div>
+	try {
+		const res = await http.get(`${baseUrl}car/unsold?status=available`);
+		if (res.status === 200) {
+			let status;
+			res.data.forEach(item => {
+				if (item.status === 'available') {
+					status = `<div>
           <i class="fab fa-opencart"></i>
           <small class="mr-2">Available</small>
         </div>`;
-        } else {
-          status = `<div>
+				} else {
+					status = `<div>
           <i class="fas fa-times-circle text-red"></i>
           <small class="mr-2">Sold</small>
         </div>`;
-        }
-        homeCars.innerHTML += `
+				}
+				homeCars.innerHTML += `
         <div class="col-12 col-md-6 col-lg-4 my-2">
 					<div class="wrapper">
 						<div class="container">
@@ -116,22 +116,22 @@ const getAllUnsoldCars = async () => {
 								</div>
 							</div>
         `;
-      });
-    }
-  } catch (error) {
-    console.log(error);
-  }
+			});
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const clearScreen = () => {
-  screen.innerHTML = '';
+	screen.innerHTML = '';
 };
-const getSingleCar = async (id) => {
-  clearScreen();
-  try {
-    const { status, data } = await http.get(`${baseUrl}car/${id}`);
-    console.log('single value car', data);
-    if (status === 200) {
-      screen.innerHTML = `
+const getSingleCar = async id => {
+	clearScreen();
+	try {
+		const { status, data } = await http.get(`${baseUrl}car/${id}`);
+		console.log('single value car', data);
+		if (status === 200) {
+			screen.innerHTML = `
       <div class="d-flex">
 							<div class="w-75 mx-auto">
 								<div class="container-fluid">
@@ -288,14 +288,14 @@ const getSingleCar = async (id) => {
 							</div>
 						</div>
       `;
-    }
-  } catch (error) {
-    console.log(error);
-  }
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const reportFradulent = (id, model, manufacturer) => {
-  clearScreen();
-  screen.innerHTML = `<div class="row">
+	clearScreen();
+	screen.innerHTML = `<div class="row">
   <div class="col-12 col-md-8 col-lg-7 mx-auto">
     <div class="card bg-light-grey">
       <div class="bg-soft-purple  p-1 card-header">
@@ -369,41 +369,44 @@ const reportFradulent = (id, model, manufacturer) => {
   </div>
 </div>`;
 };
-const postReport = async (id) => {
-  const name = $('#name').value;
-  const email = $('#email').value;
-  const phone = $('#phone').value;
-  const description = $('#description').value;
-  const e = $('#report-select');
-  const reason = e.options[e.selectedIndex].value;
-  const reportToPost = {
-    phone,
-    reason,
-    description,
-    name,
-    email,
-    carId: id,
-  };
-  if (reason === '' || name === '' || email === '' || description === '') {
-    ui.showAlert('Please fill in all fields', 'alert danger');
-  } else {
-    try {
-      const url = `${baseUrl}flag`;
-      const res = await http.post(url, reportToPost);
-      console.log(res);
-      if (res.status === 201) {
-        ui.showAlert(res.message, 'alert success');
-      } else if (res.status === 400) {
-        ui.showAlert(res.message, 'alert danger');
-      } else if (res.status === 'error') {
-        ui.showAlert(res.error.message, 'alert danger');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+const postReport = async id => {
+	try {
+		const name = $('#name').value;
+		const email = $('#email').value;
+		const phone = $('#phone').value;
+		const description = $('#description').value;
+		const e = $('#report-select');
+		const reason = e.options[e.selectedIndex].value;
+		const reportToPost = {
+			phone,
+			reason,
+			description,
+			name,
+			email,
+			carId: id,
+		};
+		if (reason === '' || name === '' || email === '' || description === '') {
+			ui.showAlert('Please fill in all fields', 'alert danger');
+		} else {
+			const url = `${baseUrl}flag`;
+			const res = await http.post(url, reportToPost);
+			console.log(res);
+			if (res.status === 201) {
+				ui.showAlert(res.message, 'alert success');
+				setTimeout(() => {
+					backHome();
+				}, 2000);
+			} else if (res.status === 400) {
+				ui.showAlert(res.message, 'alert danger');
+			} else if (res.status === 'error') {
+				ui.showAlert(res.error.message, 'alert danger');
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
 };
 const backHome = () => {
-  window.location.reload();
+	window.location.reload();
 };
 getAllUnsoldCars();
